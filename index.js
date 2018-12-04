@@ -10,12 +10,7 @@ app.use(express.static('public'));
 
 const io = socket(server);
 
-const namespaces = [
-  {
-    namespace: 'main',
-    io: io
-  }
-];
+const namespaces = [];
 
 function configureNamespace(io) {
   io.on('connection', function(socket) {
@@ -38,13 +33,11 @@ function controlNamespace(room) {
   if (!f) {
     namespaces.push({
       namespace: room,
-      io: io.of(room)
+        io: io.of(room)
     });
     configureNamespace(namespaces[namespaces.length - 1].io);
   }
 }
-
-configureNamespace(io);
 
 app.get('/', (req, res) => {
   res.sendFile('./public/index.html');
