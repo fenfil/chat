@@ -9,25 +9,13 @@
   <title>Document</title>
 </head>
 <body>
-  <div class="container-fluid">
-    <div class="chat-wrapper col-12 col-md-6 offset-md-3">
-        <div class="chat">
-          <div class="chat_header shadow-lg borrad">
-            <p class="chat_room-name font-weight-light">Room: <span class="text-primary">main</span></p>
-          </div>
-          <div class="chat_body shadow borrad">
-            <div class="chat_messages"></div>
-            <div class="chat_istyping"></div>
-          </div>
-          <div class="chat_footer row">
-            <span class="col-3 input-group-text chat_username shadow-lg borrad-s">Username</span>
-            <input class="col-8 offset-1 form-control shadow-lg borrad-s" type="text" placeholder="Message" id="message-input">
-            <button class="btn btn-primary col-12 mt-4 shadow-lg borrad-s" id="message-send">Send</button>
-          </div>
-        </div>
+  <div class="container">
+    <div class="row takeit">
+      <input class="form-control col-12 col-md-6 offset-md-3" type="text" placeholder="Type a room" id="room">
+      <input class="form-control col-12 col-md-6 offset-md-3" type="text" placeholder="Type your name" id="name">
+      <button class="btn btn-primary col-12 col-md-6 offset-md-3" id="btn">Ready</button>
     </div>
   </div>
-  <script src="/assets/vendor/js/socket.io.js"></script>
-  <script src="/assets/js/script.js"></script>
+  <script src="/assets/js/index.js"></script>
 </body>
 </html>

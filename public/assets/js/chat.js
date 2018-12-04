@@ -1,10 +1,12 @@
 const outputHolder = document.getElementsByClassName('chat_messages')[0],
       typingHolder = document.getElementsByClassName('chat_istyping')[0],
       messageHolder = document.getElementById('message-input'),
+      roomHolder = document.getElementById('roomname'),
       btn = document.getElementById('message-send'),
       usernameHolder = document.getElementsByClassName('chat_username')[0],
       params = getParamsFromUrl();
-      username = params.username || 'noname';
+      username = params.username || 'noname',
+      room = params.room || 'main';
 
 function getParamsFromUrl() {
   let equations = location.search.substr(1, location.search.length - 1).split('&');
@@ -16,10 +18,14 @@ function getParamsFromUrl() {
   return result;
 }
 
-username = username.slice(0, 1).toUpperCase() + username.slice(1);
+username = username.slice(0, 1).toUpperCase() + username.slice(1).toLowerCase();
 usernameHolder.innerHTML = username;
 
-const socket = io.connect();
+room = room.slice(0, 1).toUpperCase() + room.slice(1).toLowerCase();
+roomHolder.innerHTML = room;
+
+const socket = io.connect('/' + room.toLowerCase());
+console.log(socket.nsp);
 
 btn.addEventListener('click', function() {
   socket.emit('chat', {

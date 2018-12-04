@@ -7,10 +7,6 @@ body {
 .borrad-s {
   border-radius: 1rem;
 }
-.chat_messages {
-}
-.chat {
-}
 .chat_body {
   min-height: 50vh;
   margin-top: 2em;
@@ -32,4 +28,10 @@ body {
 }
 .chat_header {
   box-sizing: content-box;
+}
+.takeit {
+  padding-top: 3em;
+}
+.takeit input {
+  margin-bottom: 3em;
 }
