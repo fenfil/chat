@@ -2,22 +2,32 @@ const express = require('express');
 const socket = require('socket.io');
 const app = express();
 
+const debugServer = require('debug')('app:server');
+const debugSocket = require('debug')('app:socket');
+
 const server = app.listen(3000, function() {
-  console.log('listening on 3000');
+  debugServer('listening on 3000');
 });
 
+const io = socket(server);
+
+app.set('view engine', 'pug');
+app.set('views', './views');
+
+app.use(require('morgan')('tiny'));
 app.use(express.static('public'));
 
-const io = socket(server);
 
 const namespaces = [];
 
 function configureNamespace(io) {
   io.on('connection', function(socket) {
+    debugSocket(`new socket connected`);
     socket.on('chat', function(data) {
       io.emit('chat', data);
     });
     socket.on('typing', function(user) {
+      debugSocket(`${user} is typing`);
       socket.broadcast.emit('typing', user);
     });
   });
@@ -40,10 +50,14 @@ function controlNamespace(room) {
 }
 
 app.get('/', (req, res) => {
-  res.sendFile('./public/index.html');
+  debugServer('home getted');
+  res.render('index', {title: 'my app', hallo: 'halloation'});
+  // res.sendFile('./public/index.html');
 });
 
-app.get('/chat', (req, res) => {
-  controlNamespace(req.query.room.toLowerCase());
-  res.sendFile(__dirname + '/public/chat.html');
-});
+// app.get('/chat', (req, res) => {
+//   let room = req.query.room.toLowerCase();
+//   debugServer(`connected to room: ${room}`);
+//   controlNamespace(room);
+//   res.sendFile(__dirname + '/public/chat.html');
+// });
