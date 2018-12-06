@@ -34,6 +34,12 @@ socket.on('init', (data) => {
   });
 });
 
+document.getElementById('message-input').addEventListener('keypress', function(e) {
+  if (e.key == 'Enter') {
+    btn.click();
+  }
+});
+
 btn.addEventListener('click', function() {
   socket.emit('chat', {
     message: messageHolder.value,

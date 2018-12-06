@@ -39,22 +39,17 @@ function configureNamespace(room) {
   let nsp = io.of(room);
   nsp.on('connection', function(socket) {
     debugSocket(`new socket connected to: ${nsp}`);
-    
+
     socket.on('init', function(user) {
       socket.emit('init', data);
       data.users.push(user);
     });
-    
+
     socket.on('chat', function(message) {
       nsp.emit('chat', message);
       data.messages.push(message);
       backupNamespace(data);
     });
-    
-    // socket.on('typing', function(user) {
-    //   debugSocket(`${user} is typing`);
-    //   socket.broadcast.emit('typing', user);
-    // });
   });
 }
 
