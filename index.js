@@ -1,9 +1,10 @@
 const express = require('express');
 const socket = require('socket.io');
-const app = express();
 
 const debugServer = require('debug')('app:server');
 const debugSocket = require('debug')('app:socket');
+
+const app = express();
 
 const server = app.listen(3000, function() {
   debugServer('listening on 3000');
@@ -51,13 +52,12 @@ function controlNamespace(room) {
 
 app.get('/', (req, res) => {
   debugServer('home getted');
-  res.render('index', {title: 'my app', hallo: 'halloation'});
-  // res.sendFile('./public/index.html');
+  res.render('pages/login', {title: 'my app', hallo: 'halloation'});
 });
 
-// app.get('/chat', (req, res) => {
-//   let room = req.query.room.toLowerCase();
-//   debugServer(`connected to room: ${room}`);
-//   controlNamespace(room);
-//   res.sendFile(__dirname + '/public/chat.html');
-// });
+app.get('/chat', (req, res) => {
+  let room = req.query.room.toLowerCase();
+  debugServer(`new connection to room: ${room}`);
+  controlNamespace(room);
+  res.render('pages/chat');
+});

@@ -1,12 +1,6 @@
-html(lang='en')
-head
-  meta(charset='UTF-8')
-  meta(name='viewport' content='width=device-width, initial-scale=1.0')
-  meta(http-equiv='X-UA-Compatible' content='ie=edge')
-  link(rel='stylesheet' href='/assets/vendor/css/bootstrap.min.css')
-  link(rel='stylesheet' href='/assets/css/style.css')
-  title Easy Chat
-body
+extends ../layouts/default.pug
+
+block content
   div(class='container')
     div(class='row takeit')
       input(class='form-control col-12 col-md-6 offset-md-3' type='text' placeholder='Type a room' id='room' value='Main')
