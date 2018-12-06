@@ -35,3 +35,7 @@ body {
 .takeit input {
   margin-bottom: 3em;
 }
+#roomname,
+.chat_username {
+  text-transform: capitalize;
+}

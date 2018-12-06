@@ -1,5 +1,7 @@
 const express = require('express');
 const socket = require('socket.io');
+const fs = require('fs');
+const path = require('path');
 
 const debugServer = require('debug')('app:server');
 const debugSocket = require('debug')('app:socket');
@@ -15,49 +17,57 @@ const io = socket(server);
 app.set('view engine', 'pug');
 app.set('views', './views');
 
-app.use(require('morgan')('tiny'));
 app.use(express.static('public'));
 
 
-const namespaces = [];
+const rooms  = [];
 
-function configureNamespace(io) {
-  io.on('connection', function(socket) {
-    debugSocket(`new socket connected`);
-    socket.on('chat', function(data) {
-      io.emit('chat', data);
-    });
-    socket.on('typing', function(user) {
-      debugSocket(`${user} is typing`);
-      socket.broadcast.emit('typing', user);
-    });
+function backupNamespace(data) {
+  fs.writeFile(path.join('.', 'data', data.room + '.json'), JSON.stringify(data),  (err) => {
+    if (err) {
+      fs.appendFile(path.join('.', 'log', 'server_log'), err.message + "\n", err => {});
+    }
   });
 }
 
-function controlNamespace(room) {
-  let f = false;
-  for (let i = 0; i < namespaces.length; i++) {
-    if (namespaces[i].namespace == room) {
-      f = true;
-    }
+function configureNamespace(room) {
+  let data = {
+    users: [],
+    messages: [],
+    room: room
   }
-  if (!f) {
-    namespaces.push({
-      namespace: room,
-        io: io.of(room)
+  let nsp = io.of(room);
+  nsp.on('connection', function(socket) {
+    debugSocket(`new socket connected to: ${nsp}`);
+    
+    socket.on('init', function(user) {
+      socket.emit('init', data);
+      data.users.push(user);
     });
-    configureNamespace(namespaces[namespaces.length - 1].io);
-  }
+    
+    socket.on('chat', function(message) {
+      nsp.emit('chat', message);
+      data.messages.push(message);
+      backupNamespace(data);
+    });
+    
+    // socket.on('typing', function(user) {
+    //   debugSocket(`${user} is typing`);
+    //   socket.broadcast.emit('typing', user);
+    // });
+  });
 }
 
 app.get('/', (req, res) => {
-  debugServer('home getted');
-  res.render('pages/login', {title: 'my app', hallo: 'halloation'});
+  res.render('pages/login', {title: 'my app'});
 });
 
 app.get('/chat', (req, res) => {
   let room = req.query.room.toLowerCase();
   debugServer(`new connection to room: ${room}`);
-  controlNamespace(room);
+  if (rooms.indexOf(room) == -1) {
+    rooms.push(room);
+    configureNamespace(room);
+  }
   res.render('pages/chat');
 });

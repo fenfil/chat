@@ -18,14 +18,21 @@ function getParamsFromUrl() {
   return result;
 }
 
-username = username.slice(0, 1).toUpperCase() + username.slice(1).toLowerCase();
+username = username.toLowerCase();
 usernameHolder.innerHTML = username;
 
-room = room.slice(0, 1).toUpperCase() + room.slice(1).toLowerCase();
+room = room.toLowerCase();
 roomHolder.innerHTML = room;
 
-const socket = io.connect('/' + room.toLowerCase());
-console.log(socket.nsp);
+const socket = io.connect('/' + room);
+
+socket.emit('init', username);
+
+socket.on('init', (data) => {
+  data.messages.forEach(e => {
+    outputHolder.innerHTML += `<p class="text-primary">${e.user}: <span class="text-body">${e.message}</span></p>`;
+  });
+});
 
 btn.addEventListener('click', function() {
   socket.emit('chat', {
@@ -35,23 +42,6 @@ btn.addEventListener('click', function() {
   messageHolder.value = '';
 });
 
-messageHolder.addEventListener('keypress', function() {
-  socket.emit('typing', username);
-});
-
 socket.on('chat', function(data) {
   outputHolder.innerHTML += `<p class="text-primary">${data.user}: <span class="text-body">${data.message}</span></p>`;
-});
-
-let typingLife = 0;
-
-socket.on('typing', function(user) {
-  typingLife++;
-  typingHolder.innerHTML = `<p class="text-muted">${user} is typing...</p>`;
-  setTimeout(function() {
-    typingLife--;
-    if (!typingLife) {
-      typingHolder.innerHTML = '';
-    }
-  }, 1000);
 });
