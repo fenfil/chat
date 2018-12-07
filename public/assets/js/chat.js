@@ -45,11 +45,19 @@ messageHolder.addEventListener('keypress', e => {
   }
 });
 
+<<<<<<< HEAD
 //   = Sockets =
 
 const socket = io.connect('/' + room);
 
 socket.emit('init new user', username);
+=======
+document.getElementById('message-input').addEventListener('keypress', function(e) {
+  if (e.key == 'Enter') {
+    btn.click();
+  }
+});
+>>>>>>> 32b2e14785c99c3b4d3027bec91e3ee2967c354b
 
 btn.addEventListener('click', function() {
   socket.emit('chat', {

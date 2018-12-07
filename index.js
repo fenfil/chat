@@ -43,8 +43,10 @@ function configureNamespace(room) {
   let nsp = io.of(room);
   nsp.on('connection', function(socket) {
     debugSocket(`new socket connected to: ${nsp}`);
+<<<<<<< HEAD
     
-    socket.on('init new user', function(user) {
+    socket.on('init', function(user) {
+>>>>>>> 32b2e14785c99c3b4d3027bec91e3ee2967c354b
       socket.emit('init', data);
       socket.broadcast.emit('new user connected', user);
       data.users.push(user);
@@ -58,7 +60,7 @@ function configureNamespace(room) {
       let i = data.users.indexOf(user);
       data.users.splice(i, 1);
     });
-    
+
     socket.on('chat', function(message) {
       nsp.emit('chat', message);
       data.messages.push(message);
