@@ -23,26 +23,40 @@ app.use(express.static('public'));
 const rooms  = [];
 
 function backupNamespace(data) {
-  fs.writeFile(path.join('.', 'data', data.room + '.json'), JSON.stringify(data),  (err) => {
-    if (err) {
-      fs.appendFile(path.join('.', 'log', 'server_log'), err.message + "\n", err => {});
-    }
-  });
+  fs.appendFile(path.resolve('data', `${data.room}.txt`), data.toBackup(), err => {});
 }
 
 function configureNamespace(room) {
   let data = {
     users: [],
     messages: [],
-    room: room
+    room: room,
+    toBackup: function() {
+      let s = '';
+      this.messages.forEach(e => {
+        s += `${e.user}: ${e.message}\n`;
+      });
+      return s;
+    }
   }
+  let ids = {};
   let nsp = io.of(room);
   nsp.on('connection', function(socket) {
     debugSocket(`new socket connected to: ${nsp}`);
     
-    socket.on('init', function(user) {
+    socket.on('init new user', function(user) {
       socket.emit('init', data);
+      socket.broadcast.emit('new user connected', user);
       data.users.push(user);
+      ids[socket.id] = user;
+    });
+    
+    socket.on('disconnect', function() {
+      let user = ids[this.id];
+      socket.broadcast.emit('user disconnected', user);
+      delete ids[this.id];
+      let i = data.users.indexOf(user);
+      data.users.splice(i, 1);
     });
     
     socket.on('chat', function(message) {
@@ -50,11 +64,6 @@ function configureNamespace(room) {
       data.messages.push(message);
       backupNamespace(data);
     });
-    
-    // socket.on('typing', function(user) {
-    //   debugSocket(`${user} is typing`);
-    //   socket.broadcast.emit('typing', user);
-    // });
   });
 }
 

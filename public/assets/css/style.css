@@ -11,6 +11,8 @@ body {
   min-height: 50vh;
   margin-top: 2em;
   padding: 2em;
+  position: relative;
+  overflow: hidden;
 }
 .chat_username {
   text-align: center;
@@ -38,4 +40,19 @@ body {
 #roomname,
 .chat_username {
   text-transform: capitalize;
+}
+.chat_users-online {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 30%;
+  max-height: 100%;
+  overflow: hidden;
+}
+.chat_users-online p {
+  color: rgba(0, 0, 0, 0.10);
+  text-align: center;
+  font-size: 18px;
+  line-height: 2;
+  margin-bottom: 0;
 }

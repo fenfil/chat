@@ -2,20 +2,20 @@ extends ../layouts/default.pug
 
 block content
   div(class='container-fluid')
-    div(class='chat-wrapper col-12 col-md-6 offset-md-3')
-        div(class='chat')
-          div(class='chat_header shadow-lg borrad')
-            p(class='chat_room-name font-weight-light') Room:
-              span(class='text-primary' id='roomname') main
-          
-          div(class='chat_body shadow borrad')
-            div(class='chat_messages')
-            div(class='chat_istyping')
+      div(class='chat-wrapper col-12 col-md-6 offset-md-3')
+          div(class='chat')
+            div(class='chat_header')
+              p(class='chat_room-name font-weight-light shadow-lg borrad') Room:
+                span(class='text-primary' id='roomname') main
+            
+            div(class='chat_body shadow borrad')
+              div(class='chat_messages')
+              div(class='chat_users-online')
 
-          div(class='chat_footer row')
-            span(class='col-3 input-group-text chat_username shadow-lg borrad-s') Username
-            input(class='col-8 offset-1 form-control shadow-lg borrad-s' type='text' placeholder='Message' id='message-input')
-            button(class='btn btn-primary col-12 mt-4 shadow-lg borrad-s' id='message-send') Send
+            div(class='chat_footer row')
+              span(class='col-3 input-group-text chat_username shadow-lg borrad-s') Username
+              input(class='col-8 offset-1 form-control shadow-lg borrad-s' type='text' placeholder='Message' id='message-input' autofocus)
+              button(class='btn btn-primary col-12 mt-4 shadow-lg borrad-s' id='message-send') Send
 
   script(src='/assets/vendor/js/socket.io.js')
   script(src='/assets/js/chat.js')
