@@ -4,3 +4,15 @@ document.getElementById('btn').addEventListener('click', function() {
 
   location.replace(`http://${location.host}/chat?room=${room}&username=${username}`);
 });
+
+document.getElementById('room').addEventListener('keypress', (e) => {
+  if (e.key == 'Enter') {
+    document.getElementById('name').focus();
+  }
+});
+
+document.getElementById('name').addEventListener('keypress', (e) => {
+  if (e.key == 'Enter') {
+    document.getElementById('btn').click();
+  }
+});

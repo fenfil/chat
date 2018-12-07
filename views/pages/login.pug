@@ -3,7 +3,7 @@ extends ../layouts/default.pug
 block content
   div(class='container')
     div(class='row takeit')
-      input(class='form-control col-12 col-md-6 offset-md-3' type='text' placeholder='Type a room' id='room' value='Main')
+      input(class='form-control col-12 col-md-6 offset-md-3' type='text' placeholder='Type a room' id='room' value='Main' autofocus)
       input(class='form-control col-12 col-md-6 offset-md-3' type='text' placeholder='Type your name' id='name')
       button(class='btn btn-primary col-12 col-md-6 offset-md-3' id='btn') Ready
   script(src='/assets/js/index.js')
